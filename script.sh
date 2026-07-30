@@ -1,6 +1,5 @@
 #!/bin/bash
 #SBATCH --job-name=milestone0
-#SBATCH --output=milestone0_%j.out
 #SBATCH --ntasks=1
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=1
