@@ -1,6 +1,7 @@
 #include <iostream>
 #include <ostream>
 #include <string>
+#include <vector>
 #include "../include/forces.h"
 #include "../include/system.h"
 
@@ -12,15 +13,17 @@ int main() {
     std::cout << "Molecular Dynamics Lennard-Jones" << std::endl;
     System sys{};
     int n = 15;
-    std::string arrangement = "random";
+    std::string arrangement = "grid";
     double sigma = 1.0;
     double min_dist = 1.0;
     double temp = 1;
     double Kb = 1;
     setup_atoms(sys, n, arrangement, sigma, min_dist);
     init_velocities(sys, temp, Kb);
+    std::vector<double> fx_new, fy_new;
+    compute_forces(sys, 1, 5, fx_new, fy_new);
     for (int i = 0; i < n; i++) {
-        std::cout << sys.vx[i] << sys.vy[i] << std::endl;
+        std::cout << fx_new[i] << " " << fy_new[i] << std::endl;
     }
     /*
     for (int step = 0; step < num_steps; step++) {

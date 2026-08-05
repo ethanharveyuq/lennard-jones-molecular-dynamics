@@ -34,6 +34,10 @@ void setup_atoms(System &sys, int n, const std::string &arrangement, double sigm
     } else {
         // hexagonal grid particle arrangement
         sys.n = n;
+        sys.vx.resize(n);
+        sys.vy.resize(n);
+        sys.fx.resize(n);
+        sys.fy.resize(n);
         int grid_width = std::sqrt(n);
         int curr = 0;
         double dx = r_min; // x spacing
@@ -50,8 +54,6 @@ void setup_atoms(System &sys, int n, const std::string &arrangement, double sigm
         
                 sys.x.push_back(x);
                 sys.y.push_back(y);
-                sys.fx.push_back(0);
-                sys.fy.push_back(0);
         
                 placed++;
             }
