@@ -11,8 +11,8 @@ void update_velocities(System&, const std::vector<double>& fx_new,
 int main() {
     std::cout << "Molecular Dynamics Lennard-Jones" << std::endl;
     System sys{};
-    int n = 21;
-    std::string arrangement = "grid";
+    int n = 15;
+    std::string arrangement = "random";
     double sigma = 1.0;
     double min_dist = 1.0;
     setup_atoms(sys, n, arrangement, sigma, min_dist);
