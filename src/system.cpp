@@ -73,6 +73,10 @@ bool no_overlaps(System &sys, double r_min, double x, double y) {
     return true;
 }
 
+/**
+* 
+*
+*/
 void init_velocities(System& sys, double temp, double Kb) {
     // Sample velocities based on temp
     std::normal_distribution<double> normal(0, std::sqrt(Kb * temp / MASS));
@@ -98,13 +102,22 @@ void init_velocities(System& sys, double temp, double Kb) {
     }
 
     // Rescale back to temperature
+    scale_velocities(sys, temp, Kb);
+}
+
+// Might need to adjust this later (Dof might be arbitrary)
+double current_temp(const System& sys, double Kb) {
     double kenergy = 0.0;
     for (int i = 0; i < sys.n; i++) {
         kenergy += 0.5 * MASS * (sys.vx[i]*sys.vx[i] + sys.vy[i]*sys.vy[i]);
     }
     int f = 2 * sys.n; // 2D
-    double t_inst = (2 * kenergy) / (f * Kb);
-    double lambda = std::sqrt(temp / t_inst);
+    return (2 * kenergy) / (f * Kb);
+}
+
+void scale_velocities(System& sys, double target_temp, double Kb) {
+    double t_inst = current_temp(sys, Kb);
+    double lambda = std::sqrt(target_temp / t_inst);
     for (int i = 0; i < sys.n; i++) {
         sys.vx[i] *= lambda;
         sys.vy[i] *= lambda;
