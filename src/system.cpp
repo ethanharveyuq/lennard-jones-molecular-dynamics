@@ -1,13 +1,20 @@
 #include "../include/system.h"
 #include <cmath>
 #include <random>
+#include <iostream>
 
+const double MASS = 1;
+const double SEED = 42;
 
 void setup_atoms(System &sys, int n, const std::string &arrangement, double sigma_val, double r_min) {
 
     if (arrangement == "random") {
         // random atom arrangement setup
         sys.n = 0;
+        sys.vx.resize(n);
+        sys.vy.resize(n);
+        sys.fx.resize(n);
+        sys.fy.resize(n);
         double xmin = 0.0, xmax = 10.0;
         double ymin = 0.0, ymax = 10.0; // max bounds
         for (int i = 0; i < n; i++) {
@@ -17,15 +24,11 @@ void setup_atoms(System &sys, int n, const std::string &arrangement, double sigm
             while (!ok) {
                 x = xmin + (xmax - xmin) * (rand() / double(RAND_MAX));
                 y = ymin + (ymax - ymin) * (rand() / double(RAND_MAX));
-                ok = no_overlaps(sys, r_min, x, y);
+                ok = no_overlaps(sys, r_min, x, y); // check if any overlaps
             }
         
             sys.x.push_back(x);
             sys.y.push_back(y);
-            sys.fx.push_back(0);
-            sys.fy.push_back(0);
-            sys.vx.push_back(0);
-            sys.vy.push_back(0);
             sys.n++;
         }
     } else {
@@ -49,8 +52,6 @@ void setup_atoms(System &sys, int n, const std::string &arrangement, double sigm
                 sys.y.push_back(y);
                 sys.fx.push_back(0);
                 sys.fy.push_back(0);
-                sys.vx.push_back(0);
-                sys.vy.push_back(0);
         
                 placed++;
             }
@@ -72,4 +73,40 @@ bool no_overlaps(System &sys, double r_min, double x, double y) {
     return true;
 }
 
-void init_velocities(System& sys, double temp, double Kb);
+void init_velocities(System& sys, double temp, double Kb) {
+    // Sample velocities based on temp
+    std::normal_distribution<double> normal(0, std::sqrt(Kb * temp / MASS));
+    std::mt19937 rng(SEED);
+    for (int i = 0; i < sys.n; i++) {
+        double vx = normal(rng);
+        double vy = normal(rng);
+        sys.vx[i] = vx;
+        sys.vy[i] = vy;
+    }
+
+    // Remove centre of mass drift (whole system velocity is 0)
+    double vx_cm = 0.0, vy_cm = 0.0;
+    for (int i = 0; i < sys.n; i++) {
+        vx_cm += sys.vx[i];
+        vy_cm += sys.vy[i];
+    }
+    vx_cm /= sys.n;
+    vy_cm /= sys.n;
+    for (int i = 0; i < sys.n; i++) {
+        sys.vx[i] -= vx_cm;
+        sys.vy[i] -= vy_cm;
+    }
+
+    // Rescale back to temperature
+    double kenergy = 0.0;
+    for (int i = 0; i < sys.n; i++) {
+        kenergy += 0.5 * MASS * (sys.vx[i]*sys.vx[i] + sys.vy[i]*sys.vy[i]);
+    }
+    int f = 2 * sys.n; // 2D
+    double t_inst = (2 * kenergy) / (f * Kb);
+    double lambda = std::sqrt(temp / t_inst);
+    for (int i = 0; i < sys.n; i++) {
+        sys.vx[i] *= lambda;
+        sys.vy[i] *= lambda;
+    }
+}
