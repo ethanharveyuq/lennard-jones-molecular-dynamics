@@ -28,7 +28,7 @@ def update(frame_idx):
 
 
 # Create animation
-ani = animation.FuncAnimation(fig, update, frames=len(frames), interval=1000)
+ani = animation.FuncAnimation(fig, update, frames=len(frames), interval=100)
 
 plt.xlabel("X Position")
 plt.ylabel("Y Position")

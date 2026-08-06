@@ -12,18 +12,26 @@ void write_output(const System& sys, int step, std::ofstream& out) {
         out << step << "," << i << "," << sys.x[i] << "," << sys.y[i] << std::endl;
     }
 }
+/*
+* argv arrangemenr num_particles sigma min_dist temp Kb dt
+*
+*
+*
+*/
+int main(int argc, char* argv[]) {
+    std::vector<double> args(6, 1.0);
+    for (int i = 2; i < argc; i++) {
+        args[i] = std::stod(argv[i]);
+    }
 
-int main() {
-    std::cout << "Molecular Dynamics Lennard-Jones" << std::endl;
     System sys{};
-
-    int n = 15;
-    std::string arrangement = "grid";
-    double sigma = 1.0;
-    double min_dist = 1.0;
-    double temp = 1;
-    double Kb = 1;
-    double dt = 1.0;
+    std::string arrangement = argv[1];
+    int n = args[0];
+    double sigma = args[1];
+    double min_dist = args[2];
+    double temp = args[3];
+    double Kb = args[4];
+    double dt = args[5];
     bool constant_temp = false;
     int output_interval = 1;
 

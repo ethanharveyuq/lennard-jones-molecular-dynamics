@@ -1,7 +1,6 @@
 #include "../include/system.h"
 #include <cmath>
 #include <random>
-#include <iostream>
 
 const double MASS = 1;
 const double SEED = 42;

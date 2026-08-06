@@ -8,12 +8,10 @@ double min_image_distance(const System& sys, int i, int j, double& dx, double& d
     // currently only calculates raw distance
     double dx_raw = sys.x[i] - sys.x[j];
     double dy_raw = sys.y[i] - sys.y[j];
-    if (dx_raw > 5) {
-        dx_raw -= 10;
-    }
-    if (dy_raw > 5) {
-        dy_raw -= 10;
-    }
+    if (dx_raw > 5) dx_raw -= 10;
+    else if (dx_raw < -5) dx_raw += 10;
+    if (dy_raw > 5) dy_raw -= 10;
+    else if (dy_raw < -5) dy_raw += 10;
     dx = dx_raw;
     dy = dy_raw;
 
