@@ -6,8 +6,17 @@ const double EPSILON = 1.0;
 
 double min_image_distance(const System& sys, int i, int j, double& dx, double& dy) {
     // currently only calculates raw distance
-    dx = sys.x[i] - sys.x[j];
-    dy = sys.y[i] - sys.y[j];
+    double dx_raw = sys.x[i] - sys.x[j];
+    double dy_raw = sys.y[i] - sys.y[j];
+    if (dx_raw > 5) {
+        dx_raw -= 10;
+    }
+    if (dy_raw > 5) {
+        dy_raw -= 10;
+    }
+    dx = dx_raw;
+    dy = dy_raw;
+
     return sqrt((dx * dx) + (dy * dy));
 }
 
