@@ -1,39 +1,52 @@
+#include <fstream>
 #include <iostream>
 #include <ostream>
 #include <string>
 #include <vector>
 #include "../include/forces.h"
 #include "../include/system.h"
+#include "../include/integrate.h"
 
-void move(System&, double dt);                       // x += vx*dt + 0.5*fx*dt²  (uses OLD force)
-void update_velocities(System&, const std::vector<double>& fx_new,
-                        const std::vector<double>& fy_new, double dt);           // v += 0.5*(f_old+f_new)*dt
+void write_output(const System& sys, int step, std::ofstream& out) {
+    for (int i = 0; i < sys.n; i++) {
+        out << i << "," << sys.x[i] << "," << sys.y[i] << std::endl;
+    }
+}
 
 int main() {
     std::cout << "Molecular Dynamics Lennard-Jones" << std::endl;
     System sys{};
+
     int n = 15;
     std::string arrangement = "grid";
     double sigma = 1.0;
     double min_dist = 1.0;
     double temp = 1;
     double Kb = 1;
+    double dt = 1.0;
+    bool constant_temp = false;
+    int output_interval = 1;
+
+    std::ofstream outfile("output.csv");
+    outfile << "step,id,x,y\n";
+
     setup_atoms(sys, n, arrangement, sigma, min_dist);
     init_velocities(sys, temp, Kb);
-    std::vector<double> fx_new, fy_new;
-    compute_forces(sys, 1, 5, fx_new, fy_new);
-    for (int i = 0; i < n; i++) {
-        std::cout << fx_new[i] << " " << fy_new[i] << std::endl;
-    }
-    /*
-    for (int step = 0; step < num_steps; step++) {
-        move(sys, dt);                                          // uses sys.fx/fy (old)
+
+    for (int step = 0; step < 1000; step++) {
+        move(sys, dt);
         std::vector<double> fx_new(sys.n), fy_new(sys.n);
-        compute_forces(sys, bond_strength, cutoff_dist, fx_new, fy_new);  // from new positions
-        update_velocities(sys, fx_new, fy_new, dt);              // combines old + new
-        sys.fx = fx_new; sys.fy = fy_new;                        // new becomes old for next iter
-        if (constant_temp) scale_velocities(sys, temp, Kb);
-        if (step % output_interval == 0) write_output(sys, step, outfile);
+        compute_forces(sys, 1.0, 1.0, fx_new, fy_new);
+        update_velocities(sys, fx_new, fy_new, dt);
+        sys.fx = fx_new; 
+        sys.fy = fy_new;
+        if (constant_temp) {
+            scale_velocities(sys, temp, Kb);
+        }
+        if (step % output_interval == 0) {
+            write_output(sys, step, outfile);
+        }
     }
-        */
+    outfile.close();
+    return 0;
 }
