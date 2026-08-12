@@ -61,7 +61,7 @@ int main(int argc, char* argv[]) {
     for (int step = 0; step < 1000; step++) {
         move(sys, dt);
         std::vector<double> fx_new(sys.n), fy_new(sys.n);
-        compute_forces(sys, bond_strength, cutoff_dist, fx_new, fy_new);
+        compute_forces(sys, bond_strength,sigma, cutoff_dist, fx_new, fy_new);
         update_velocities(sys, fx_new, fy_new, dt);
         sys.fx = fx_new; 
         sys.fy = fy_new;

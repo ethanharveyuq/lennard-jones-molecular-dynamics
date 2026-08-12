@@ -6,5 +6,6 @@ double calc_force(double r, double sigma, double bond_strength);
 void compute_forces(const System& sys,
     double bond_strength,
     double cutoff_dist,
+    double sigma,
     std::vector<double>& fx_new,
     std::vector<double>& fy_new);

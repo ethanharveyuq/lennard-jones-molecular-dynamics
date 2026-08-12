@@ -7,6 +7,6 @@
 #SBATCH --partition=cosc3500
 #SBATCH --account=cosc3500
 
-cd build
-cmake --build .
-./md_serial random 20 1.0 1.0 1.0 1.0 0.1 1.0 1.0
+cmake --build build
+build/md_serial grid 20 1.0 2.0 1.0 1.0 0.01 1.0 1.0
+python3 src/visualise/visualise.py

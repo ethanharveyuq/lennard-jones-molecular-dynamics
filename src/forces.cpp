@@ -1,9 +1,6 @@
 #include "../include/forces.h"
 #include <cmath>
 
-const double SIGMA = 1.0;
-const double EPSILON = 1.0;
-
 double min_image_distance(const System& sys, int i, int j, double& dx, double& dy) {
     // currently only calculates raw distance
     double dx_raw = sys.x[i] - sys.x[j];
@@ -27,6 +24,7 @@ double calc_force(double r, double sigma, double bond_strength) {
 void compute_forces(const System& sys,
     double bond_strength,
     double cutoff_dist,
+    double sigma,
     std::vector<double>& fx_new,
     std::vector<double>& fy_new)
 {
@@ -43,7 +41,7 @@ void compute_forces(const System& sys,
             if (dist > cutoff_dist) {
                 continue;
             }
-            double F = calc_force(dist, SIGMA, EPSILON);
+            double F = calc_force(dist, sigma, bond_strength);
             double Fx = F * dx / dist;
             double Fy = F * dy / dist;
             fx_new[i] += Fx;
