@@ -12,8 +12,8 @@ void write_output(const System& sys, int step, std::ofstream& out) {
         out << step << "," << i << "," << sys.x[i] << "," << sys.y[i] << std::endl;
     }
 }
+
 /*
-* argv arrangemenr num_particles sigma min_dist temp Kb dt
 *
 *
 *
@@ -31,13 +31,21 @@ int main(int argc, char* argv[]) {
     }
     
     int n = args[0];
+    std::cout << "n: " << n << std::endl;
     double sigma = args[1];
+    std::cout << "sigma: " << sigma << std::endl;
     double min_dist = args[2];
+    std::cout << "min_dist: " << min_dist << std::endl;
     double temp = args[3];
+    std::cout << "temp: " << temp << std::endl;
     double Kb = args[4];
+    std::cout << "Kb: " << Kb << std::endl;
     double dt = args[5];
+    std::cout << "dt: " << dt << std::endl;
     double bond_strength = args[6];
+    std::cout << "bond_strength: " << bond_strength << std::endl;
     double cutoff_dist = args[7];
+    std::cout << "cutoff_dist: " << cutoff_dist << std::endl;
 
     System sys{};
     std::string arrangement = argv[1];

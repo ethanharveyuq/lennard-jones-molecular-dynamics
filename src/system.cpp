@@ -37,6 +37,8 @@ void setup_atoms(System &sys, int n, const std::string &arrangement, double sigm
         sys.vy.resize(n);
         sys.fx.resize(n);
         sys.fy.resize(n);
+        sys.x.resize(n);
+        sys.y.resize(n);
         int grid_width = std::sqrt(n);
         int curr = 0;
         double dx = r_min; // x spacing
@@ -51,12 +53,38 @@ void setup_atoms(System &sys, int n, const std::string &arrangement, double sigm
                 double x = x_offset + col * dx;
                 double y = row * dy;
         
-                sys.x.push_back(x);
-                sys.y.push_back(y);
+                sys.x[placed] = x;
+                sys.y[placed] = y;
         
                 placed++;
             }
         }
+        // Compute bounding box
+        double xmin = sys.x[0], xmax = sys.x[0];
+        double ymin = sys.y[0], ymax = sys.y[0];
+
+        for (int i = 1; i < sys.n; i++) {
+            if (sys.x[i] < xmin) xmin = sys.x[i];
+            if (sys.x[i] > xmax) xmax = sys.x[i];
+            if (sys.y[i] < ymin) ymin = sys.y[i];
+            if (sys.y[i] > ymax) ymax = sys.y[i];
+        }
+
+        double x_center = 0.5 * (xmin + xmax);
+        double y_center = 0.5 * (ymin + ymax);
+
+        // shift to recentre
+        double target_xc = 5.0;
+        double target_yc = 5.0;
+
+        double shift_x = target_xc - x_center;
+        double shift_y = target_yc - y_center;
+
+        for (int i = 0; i < sys.n; i++) {
+            sys.x[i] += shift_x;
+            sys.y[i] += shift_y;
+        }
+
     }
     return;
 }
