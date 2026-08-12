@@ -19,19 +19,28 @@ void write_output(const System& sys, int step, std::ofstream& out) {
 *
 */
 int main(int argc, char* argv[]) {
-    std::vector<double> args(6, 1.0);
-    for (int i = 2; i < argc; i++) {
-        args[i] = std::stod(argv[i]);
+    if (argc < 10) {
+        std::cerr << "Usage: " << argv[0]
+                   << " <arrangement> <n> <sigma> <min_dist> <temp> <Kb> <dt> <bond_strength> <cutoff_dist>\n";
+        return 1;
     }
-
-    System sys{};
-    std::string arrangement = argv[1];
+    
+    std::vector<double> args(8, 1.0);
+    for (int i = 2; i < argc; i++) {
+        args[i - 2] = std::stod(argv[i]);
+    }
+    
     int n = args[0];
     double sigma = args[1];
     double min_dist = args[2];
     double temp = args[3];
     double Kb = args[4];
     double dt = args[5];
+    double bond_strength = args[6];
+    double cutoff_dist = args[7];
+
+    System sys{};
+    std::string arrangement = argv[1];
     bool constant_temp = false;
     int output_interval = 1;
 
@@ -44,7 +53,7 @@ int main(int argc, char* argv[]) {
     for (int step = 0; step < 1000; step++) {
         move(sys, dt);
         std::vector<double> fx_new(sys.n), fy_new(sys.n);
-        compute_forces(sys, 1.0, 1.0, fx_new, fy_new);
+        compute_forces(sys, bond_strength, cutoff_dist, fx_new, fy_new);
         update_velocities(sys, fx_new, fy_new, dt);
         sys.fx = fx_new; 
         sys.fy = fy_new;

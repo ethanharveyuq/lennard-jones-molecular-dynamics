@@ -7,5 +7,6 @@
 #SBATCH --partition=cosc3500
 #SBATCH --account=cosc3500
 
-g++ -O2 -o md_project main.cpp random 20 1.0 1.0 1.0 1.0 0.1
-./md_project
+cd build
+cmake --build .
+./md_serial random 20 1.0 1.0 1.0 1.0 0.1 1.0 1.0
