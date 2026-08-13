@@ -71,7 +71,7 @@ int main(int argc, char* argv[]) {
 
     
 
-    setup_atoms(sys, n, arrangement, sigma, min_dist);
+    setup_atoms(sys, n, arrangement, sigma, min_dist, x_max, y_max);
     init_velocities(sys, temp, Kb);
 
     for (int step = 0; step < 1000; step++) {

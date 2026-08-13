@@ -5,7 +5,9 @@
 const double MASS = 1;
 const double SEED = 42;
 
-void setup_atoms(System &sys, int n, const std::string &arrangement, double sigma_val, double r_min) {
+void setup_atoms(System &sys, int n, const std::string &arrangement, double sigma_val, double r_min, double x_max, double y_max) {
+    sys.x_max = x_max;
+    sys.y_max = y_max;
 
     if (arrangement == "random") {
         // random atom arrangement setup
@@ -14,15 +16,14 @@ void setup_atoms(System &sys, int n, const std::string &arrangement, double sigm
         sys.vy.resize(n);
         sys.fx.resize(n);
         sys.fy.resize(n);
-        double xmin = 0.0, xmax = 10.0;
-        double ymin = 0.0, ymax = 10.0; // max bounds
+        double x_min = 0.0, y_min = 0.0;
         for (int i = 0; i < n; i++) {
             bool ok = false;
             double x, y;
         
             while (!ok) {
-                x = xmin + (xmax - xmin) * (rand() / double(RAND_MAX));
-                y = ymin + (ymax - ymin) * (rand() / double(RAND_MAX));
+                x = x_min + (x_max - x_min) * (rand() / double(RAND_MAX));
+                y = y_min + (y_max - y_min) * (rand() / double(RAND_MAX));
                 ok = no_overlaps(sys, r_min, x, y); // check if any overlaps
             }
         
