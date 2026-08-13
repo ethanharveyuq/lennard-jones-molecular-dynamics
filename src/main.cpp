@@ -74,7 +74,7 @@ int main(int argc, char* argv[]) {
     setup_atoms(sys, n, arrangement, sigma, min_dist, x_max, y_max);
     init_velocities(sys, temp, Kb);
 
-    for (int step = 0; step < 1000; step++) {
+    for (int step = 0; step < 100000; step++) {
         move(sys, dt);
         std::vector<double> fx_new(sys.n), fy_new(sys.n);
         compute_forces(sys, bond_strength,sigma, cutoff_dist, fx_new, fy_new);
