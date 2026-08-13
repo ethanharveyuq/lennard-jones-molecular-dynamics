@@ -5,10 +5,10 @@ double min_image_distance(const System& sys, int i, int j, double& dx, double& d
     // currently only calculates raw distance
     double dx_raw = sys.x[i] - sys.x[j];
     double dy_raw = sys.y[i] - sys.y[j];
-    if (dx_raw > 5) dx_raw -= 10;
-    else if (dx_raw < -5) dx_raw += 10;
-    if (dy_raw > 5) dy_raw -= 10;
-    else if (dy_raw < -5) dy_raw += 10;
+    if (dx_raw > 5) dx_raw -= sys.x_max;
+    else if (dx_raw < -5) dx_raw += sys.x_max;
+    if (dy_raw > 5) dy_raw -= sys.y_max;
+    else if (dy_raw < -5) dy_raw += sys.y_max;
     dx = dx_raw;
     dy = dy_raw;
 
@@ -17,7 +17,10 @@ double min_image_distance(const System& sys, int i, int j, double& dx, double& d
 
 
 double calc_force(double r, double sigma, double bond_strength) {
-    return 24 * bond_strength * (2 * pow(sigma / r, 12) - pow(sigma / r, 6)) / r;
+    double sor = sigma / r;
+    double sor6 = sor * sor * sor * sor * sor * sor;
+    double sor12 = sor6 * sor6;
+    return 24 * bond_strength * (2 * sor12 - sor6) / r;
 }
 
 
