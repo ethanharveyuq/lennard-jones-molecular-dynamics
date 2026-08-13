@@ -8,5 +8,5 @@
 #SBATCH --account=cosc3500
 
 cmake --build build
-build/md_serial grid 20 1.0 2.0 1.0 1.0 0.01 1.0 1.0
+build/md_serial grid --constant-temp 40 1.0 1.2 1.0 1.0 0.01 1.0 1.0
 python3 src/visualise/visualise.py

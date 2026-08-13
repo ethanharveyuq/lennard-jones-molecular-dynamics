@@ -19,15 +19,16 @@ void write_output(const System& sys, int step, std::ofstream& out) {
 *
 */
 int main(int argc, char* argv[]) {
-    if (argc < 10) {
+    if (argc < 11) {
         std::cerr << "Usage: " << argv[0]
-                   << " <arrangement> <n> <sigma> <min_dist> <temp> <Kb> <dt> <bond_strength> <cutoff_dist>\n";
+                    << " <arrangement> <constant-temp> <n> <sigma> <min_dist> <temp> <Kb> <dt> <bond_strength> <cutoff_dist>\n";
         return 1;
     }
-    
+
     std::vector<double> args(8, 1.0);
-    for (int i = 2; i < argc; i++) {
-        args[i - 2] = std::stod(argv[i]);
+    for (int i = 3; i < argc; i++) {
+        args[i - 3] = std::stod(argv[i]);
+        
     }
     
     int n = args[0];
@@ -50,6 +51,10 @@ int main(int argc, char* argv[]) {
     System sys{};
     std::string arrangement = argv[1];
     bool constant_temp = false;
+    std::string const_temp = "--constant-temp";
+    if (const_temp.compare(argv[2]) == 0) {
+        constant_temp = true;
+    }
     int output_interval = 1;
 
     std::ofstream outfile("output.csv");
