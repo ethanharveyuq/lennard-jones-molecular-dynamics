@@ -75,8 +75,8 @@ void setup_atoms(System &sys, int n, const std::string &arrangement, double sigm
         double y_center = 0.5 * (ymin + ymax);
 
         // shift to recentre
-        double target_xc = 5.0;
-        double target_yc = 5.0;
+        double target_xc = sys.x_max / 2;
+        double target_yc = sys.y_max / 2;
 
         double shift_x = target_xc - x_center;
         double shift_y = target_yc - y_center;
