@@ -6,12 +6,7 @@
 #include "../include/forces.h"
 #include "../include/system.h"
 #include "../include/integrate.h"
-
-void write_output(const System& sys, int step, std::ofstream& out) {
-    for (int i = 0; i < sys.n; i++) {
-        out << step << "," << i << "," << sys.x[i] << "," << sys.y[i] << std::endl;
-    }
-}
+#include "../include/io.h"
 
 /*
 *
@@ -74,7 +69,7 @@ int main(int argc, char* argv[]) {
     setup_atoms(sys, n, arrangement, sigma, min_dist, x_max, y_max);
     init_velocities(sys, temp, Kb);
 
-    for (int step = 0; step < 100000; step++) {
+    for (int step = 0; step < 10000; step++) {
         move(sys, dt);
         std::vector<double> fx_new(sys.n), fy_new(sys.n);
         compute_forces(sys, bond_strength,sigma, cutoff_dist, fx_new, fy_new);
