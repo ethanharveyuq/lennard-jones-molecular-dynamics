@@ -14,7 +14,7 @@
  * @param dx    Output: minimum-image x displacement.
  * @param dy    Output: minimum-image y displacement.
  *
- * @return The minimum-image distance between particles i and j.
+ * @return The minimum-image distance squared between particles i and j.
  */
 double min_image_distance(const System& sys, int i, int j, double& dx, double& dy);
 
@@ -25,13 +25,13 @@ double min_image_distance(const System& sys, int i, int j, double& dx, double& d
  * Uses the standard LJ force expression:
  *     F(r) = 24 * epsilon * (2*(sigma/r)^12 - (sigma/r)^6) / r
  *
- * @param r             Separation distance between particles.
- * @param sigma         Lennard-Jones size parameter.
+ * @param r2            Separation distance squared between particles.
+ * @param sigma2        Lennard-Jones size parameter squared.
  * @param bond_strength Lennard-Jones epsilon (interaction strength).
  *
- * @return The scalar force magnitude F(r).
+ * @return The scalar unit force magnitude F(r).
  */
-double calc_force(double r, double sigma, double bond_strength);
+double calc_force(double r2, double sigma2, double bond_strength);
 
 
 /**

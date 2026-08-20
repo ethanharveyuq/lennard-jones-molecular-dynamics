@@ -1,5 +1,4 @@
 #include "../include/forces.h"
-#include <cmath>
 
 double min_image_distance(const System& sys, int i, int j, double& dx, double& dy) 
 {
@@ -11,30 +10,30 @@ double min_image_distance(const System& sys, int i, int j, double& dx, double& d
     // If the displacement crosses more than half the box,
     // wrap it back into the nearest periodic image.
     if (dx_raw > sys.x_max / 2) dx_raw -= sys.x_max;
-    else if (dx_raw < - sys.x_max / 2) dx_raw += sys.x_max;
+    else if (dx_raw < -sys.x_max / 2) dx_raw += sys.x_max;
 
     // same logic for y direction
     if (dy_raw > sys.y_max / 2) dy_raw -= sys.y_max;
-    else if (dy_raw < - sys.x_max / 2) dy_raw += sys.y_max;
+    else if (dy_raw < -sys.y_max / 2) dy_raw += sys.y_max;
 
     // store the correct distances
     dx = dx_raw;
     dy = dy_raw;
 
-    // Return Euclidean distance using minimum-image dx, dy
-    return sqrt((dx * dx) + (dy * dy));
+    // Return Euclidean distance squared using minimum-image dx, dy
+    return (dx * dx) + (dy * dy);
 }
 
 
-double calc_force(double r, double sigma, double bond_strength) 
+double calc_force(double r2, double sigma2, double bond_strength) 
 {
     // Compute (sigma/r)^6 and (sigma/r)^12 efficiently
-    double sor = sigma / r;
-    double sor6 = sor * sor * sor * sor * sor * sor;
+    double sor2 = (sigma2) / r2;
+    double sor6 = sor2 * sor2 * sor2;
     double sor12 = sor6 * sor6;
 
-    // Standard Lennard-Jones force magnitude
-    return 24 * bond_strength * (2 * sor12 - sor6) / r;
+    // Standard unit Lennard-Jones force magnitude (F/r)
+    return 24 * bond_strength * (2 * sor12 - sor6) / r2;
 }
 
 
@@ -49,6 +48,8 @@ void compute_forces(const System& sys,
     fx_new.assign(sys.n, 0.0);
     fy_new.assign(sys.n, 0.0);
 
+    double cutoff_dist2 = cutoff_dist * cutoff_dist;
+    double sigma2 = sigma * sigma;
     // Loop over all particle pairs (i,j)
     for (int i = 0; i < sys.n; i++) {
         for (int j = 0; j < sys.n; j++) {
@@ -56,19 +57,19 @@ void compute_forces(const System& sys,
             // Skip self interaction
             if (i == j) continue;
 
-            //Compute min-image distance and displacement
+            // Compute min-image distance and displacement
             double dx, dy;
-            double dist = min_image_distance(sys, i, j, dx, dy);
+            double dist2 = min_image_distance(sys, i, j, dx, dy);
 
             // Ignore interactions beyond the cutoff
-            if (dist > cutoff_dist) continue;
+            if (dist2 > cutoff_dist2) continue;
 
             // Compute LJ force magnitude
-            double F = calc_force(dist, sigma, bond_strength);
+            double F = calc_force(dist2, sigma2, bond_strength); // could replace with an inline
 
-            // Convert scalar force to vector comps
-            double Fx = F * dx / dist;
-            double Fy = F * dy / dist;
+            // Convert scalar force to vector components
+            double Fx = F * dx;
+            double Fy = F * dy;
 
             // Accumulate the force on particle i
             fx_new[i] += Fx;
