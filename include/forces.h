@@ -8,15 +8,17 @@
  * The raw displacement between particles i and j is adjusted so that dx and dy
  * represent the shortest separation across the periodic domain.
  *
- * @param sys   System containing particle positions and box dimensions.
- * @param i     Index of the first particle.
- * @param j     Index of the second particle.
- * @param dx    Output: minimum-image x displacement.
- * @param dy    Output: minimum-image y displacement.
+ * @param sys       System containing particle positions and box dimensions.
+ * @param i         Index of the first particle.
+ * @param j         Index of the second particle.
+ * @param dx        Output: minimum-image x displacement.
+ * @param dy        Output: minimum-image y displacement.
+ * @param half_x    Half the sys.x_max (prevents recalc).
+ * @param half_y    Half the sys.y_max (prevents recalc)
  *
  * @return The minimum-image distance squared between particles i and j.
  */
-double min_image_distance(const System& sys, int i, int j, double& dx, double& dy);
+double min_image_distance(const System& sys, int i, int j, double& dx, double& dy, double x_half, double y_half);
 
 
 /**
