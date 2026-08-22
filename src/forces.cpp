@@ -25,18 +25,6 @@ double min_image_distance(const System& sys, int i, int j, double& dx, double& d
 }
 
 
-double calc_force(double r2, double sigma2, double bond_strength) 
-{
-    // Compute (sigma/r)^6 and (sigma/r)^12 efficiently
-    double sor2 = (sigma2) / r2;
-    double sor6 = sor2 * sor2 * sor2;
-    double sor12 = sor6 * sor6;
-
-    // Standard unit Lennard-Jones force magnitude (F/r)
-    return 24 * bond_strength * (2 * sor12 - sor6) / r2;
-}
-
-
 void compute_forces(const System& sys,
     double bond_strength,
     double cutoff_dist,
@@ -65,7 +53,16 @@ void compute_forces(const System& sys,
             if (dist2 > cutoff_dist2) continue;
 
             // Compute LJ force magnitude
-            double F = calc_force(dist2, sigma2, bond_strength); // could replace with an inline
+            // Compute (sigma/r)^6 and (sigma/r)^12 efficiently
+            double inv_r2 = 1.0 / dist2; // Prevents multiple divisions
+            double sor2 = (sigma2) * inv_r2;
+            double sor6 = sor2 * sor2 * sor2; // Avoiding pow function
+            double sor12 = sor6 * sor6;
+
+            // Standard unit Lennard-Jones force magnitude (F/r)
+            double F = 24 * bond_strength * (2 * sor12 - sor6) * inv_r2;
+
+
 
             // Convert scalar force to vector components
             double Fx = F * dx;

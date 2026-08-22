@@ -20,21 +20,6 @@ double min_image_distance(const System& sys, int i, int j, double& dx, double& d
 
 
 /**
- * @brief Compute the Lennard-Jones force magnitude between two particles.
- *
- * Uses the standard LJ force expression:
- *     F(r) = 24 * epsilon * (2*(sigma/r)^12 - (sigma/r)^6) / r
- *
- * @param r2            Separation distance squared between particles.
- * @param sigma2        Lennard-Jones size parameter squared.
- * @param bond_strength Lennard-Jones epsilon (interaction strength).
- *
- * @return The scalar unit force magnitude F(r).
- */
-double calc_force(double r2, double sigma2, double bond_strength);
-
-
-/**
  * @brief Compute all pairwise Lennard-Jones forces in the system.
  *
  * Applies the minimum-image convention and ignores interactions beyond
