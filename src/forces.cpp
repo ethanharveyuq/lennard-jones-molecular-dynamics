@@ -44,11 +44,7 @@ void compute_forces(const System& sys,
 
     // Loop over all particle pairs (i,j)
     for (int i = 0; i < sys.n; i++) {
-        for (int j = 0; j < sys.n; j++) {
-
-            // Skip self interaction
-            if (i == j) continue;
-
+        for (int j = i + 1; j < sys.n; j++) {
             // Compute min-image distance and displacement
             double dx, dy;
             double dist2 = min_image_distance(sys, i, j, dx, dy, x_half, y_half);
@@ -66,8 +62,6 @@ void compute_forces(const System& sys,
             // Standard unit Lennard-Jones force magnitude (F/r)
             double F = 24 * bond_strength * (2 * sor12 - sor6) * inv_r2;
 
-
-
             // Convert scalar force to vector components
             double Fx = F * dx;
             double Fy = F * dy;
@@ -75,6 +69,8 @@ void compute_forces(const System& sys,
             // Accumulate the force on particle i
             fx_new[i] += Fx;
             fy_new[i] += Fy;
+            fx_new[j] -= Fx;
+            fy_new[j] -= Fy;
         }
     }
 }
