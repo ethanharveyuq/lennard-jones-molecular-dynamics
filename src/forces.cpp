@@ -1,6 +1,6 @@
 #include "../include/forces.h"
 
-double min_image_distance(const System& sys, int i, int j, double& dx, double& dy, double x_half, double y_half) 
+double min_image_distance(const System& sys, int i, int j, double& dx, double& dy) 
 {
     // Raw displacement between particles i and j
     double dx_raw = sys.x[i] - sys.x[j];
@@ -9,12 +9,12 @@ double min_image_distance(const System& sys, int i, int j, double& dx, double& d
     // Apply minimum-image convention in x-direction
     // If the displacement crosses more than half the box,
     // wrap it back into the nearest periodic image.
-    if (dx_raw > x_half) dx_raw -= sys.x_max;
-    else if (dx_raw < -x_half) dx_raw += sys.x_max;
+    if (dx_raw > sys.x_half) dx_raw -= sys.x_max;
+    else if (dx_raw < -sys.x_half) dx_raw += sys.x_max;
 
     // same logic for y direction
-    if (dy_raw > y_half) dy_raw -= sys.y_max;
-    else if (dy_raw < -y_half) dy_raw += sys.y_max;
+    if (dy_raw > sys.y_half) dy_raw -= sys.y_max;
+    else if (dy_raw < -sys.y_half) dy_raw += sys.y_max;
 
     // store the correct distances
     dx = dx_raw;
@@ -47,7 +47,7 @@ void compute_forces(const System& sys,
         for (int j = i + 1; j < sys.n; j++) {
             // Compute min-image distance and displacement
             double dx, dy;
-            double dist2 = min_image_distance(sys, i, j, dx, dy, x_half, y_half);
+            double dist2 = min_image_distance(sys, i, j, dx, dy);
 
             // Ignore interactions beyond the cutoff
             if (dist2 > cutoff_dist2) continue;

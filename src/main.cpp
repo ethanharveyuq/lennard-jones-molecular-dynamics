@@ -135,12 +135,12 @@ int main(int argc, char* argv[])
     }
 
     // Main loop
-    for (int step = 0; step < 10000; step++) {
+    std::vector<double> fx_new(sys.n), fy_new(sys.n);
+    for (int step = 0; step < 50000; step++) {
         // Move particles based on prev velocity
         move(sys, dt);
 
         // Find the new forces based on new pos
-        std::vector<double> fx_new(sys.n), fy_new(sys.n);
         compute_forces(sys, bond_strength,sigma, cutoff_dist, fx_new, fy_new);
 
         // Update the velocities based on old and new forces

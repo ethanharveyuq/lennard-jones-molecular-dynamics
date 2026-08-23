@@ -15,10 +15,12 @@
  *   fx,fy  - particle forces
  *   x_max  - simulation box size in x-direction
  *   y_max  - simulation box size in y-direction
+ *   x_half - simulation box half length (used in min-image-dist)
+ *   y_half - simulation box half length
  */
 struct System {
     int n;
-    double x_max, y_max;
+    double x_max, y_max, x_half, y_half;
     std::vector<double> x, y, vx, vy, fx, fy;
     std::vector<double> sigma;
 };

@@ -10,6 +10,8 @@ void setup_atoms(System &sys, int n, const std::string &arrangement, double r_mi
     // store box dimensions
     sys.x_max = x_max;
     sys.y_max = y_max;
+    sys.x_half = x_max * 0.5;
+    sys.y_half = y_max * 0.5;
 
     if (arrangement == "random") {
         // random atom arrangement setup with overlap rejection
