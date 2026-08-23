@@ -3,14 +3,22 @@
 double min_image_distance(const System& sys, int i, int j, double& dx, double& dy, double x_half, double y_half) 
 {
     // Raw displacement between particles i and j
-    dx = sys.x[i] - sys.x[j];
-    dy = sys.y[i] - sys.y[j];
+    double dx_raw = sys.x[i] - sys.x[j];
+    double dy_raw = sys.y[i] - sys.y[j];
 
-    // Apply minimum-image convention
+    // Apply minimum-image convention in x-direction
     // If the displacement crosses more than half the box,
     // wrap it back into the nearest periodic image.
-    dx -= sys.x_max * std::round(dx / sys.x_max);
-    dy -= sys.y_max * std::round(dy / sys.y_max);
+    if (dx_raw > x_half) dx_raw -= sys.x_max;
+    else if (dx_raw < -x_half) dx_raw += sys.x_max;
+
+    // same logic for y direction
+    if (dy_raw > y_half) dy_raw -= sys.y_max;
+    else if (dy_raw < -y_half) dy_raw += sys.y_max;
+
+    // store the correct distances
+    dx = dx_raw;
+    dy = dy_raw;
 
     // Return Euclidean distance squared using minimum-image dx, dy
     return (dx * dx) + (dy * dy);
