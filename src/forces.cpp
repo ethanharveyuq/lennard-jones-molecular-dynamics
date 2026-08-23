@@ -1,30 +1,5 @@
 #include "../include/forces.h"
 
-double min_image_distance(const System& sys, int i, int j, double& dx, double& dy) 
-{
-    // Raw displacement between particles i and j
-    double dx_raw = sys.x[i] - sys.x[j];
-    double dy_raw = sys.y[i] - sys.y[j];
-
-    // Apply minimum-image convention in x-direction
-    // If the displacement crosses more than half the box,
-    // wrap it back into the nearest periodic image.
-    if (dx_raw > sys.x_half) dx_raw -= sys.x_max;
-    else if (dx_raw < -sys.x_half) dx_raw += sys.x_max;
-
-    // same logic for y direction
-    if (dy_raw > sys.y_half) dy_raw -= sys.y_max;
-    else if (dy_raw < -sys.y_half) dy_raw += sys.y_max;
-
-    // store the correct distances
-    dx = dx_raw;
-    dy = dy_raw;
-
-    // Return Euclidean distance squared using minimum-image dx, dy
-    return (dx * dx) + (dy * dy);
-}
-
-
 void compute_forces(const System& sys,
     double bond_strength,
     double cutoff_dist,
@@ -44,10 +19,28 @@ void compute_forces(const System& sys,
 
     // Loop over all particle pairs (i,j)
     for (int i = 0; i < sys.n; i++) {
+        // cache memory rather than conitnually reference
+        const double xi = sys.x[i];
+        const double yi = sys.y[i];
+        
         for (int j = i + 1; j < sys.n; j++) {
             // Compute min-image distance and displacement
-            double dx, dy;
-            double dist2 = min_image_distance(sys, i, j, dx, dy);
+            // Raw displacement between particles i and j
+            double dx = xi - sys.x[j];
+            double dy = yi - sys.y[j];
+
+            // Apply minimum-image convention in x-direction
+            // If the displacement crosses more than half the box,
+            // wrap it back into the nearest periodic image.
+            if (dx > sys.x_half) dx -= sys.x_max;
+            else if (dx < -sys.x_half) dx += sys.x_max;
+
+            // same logic for y direction
+            if (dy > sys.y_half) dy -= sys.y_max;
+            else if (dy < -sys.y_half) dy += sys.y_max;
+
+            // Euclidean distance squared using minimum-image dx, dy
+            double dist2 = (dx * dx) + (dy * dy);
 
             // Ignore interactions beyond the cutoff
             if (dist2 > cutoff_dist2) continue;

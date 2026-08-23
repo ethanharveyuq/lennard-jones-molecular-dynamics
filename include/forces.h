@@ -2,24 +2,6 @@
 #include "system.h"
 
 /**
- * @brief Compute the minimum-image displacement and distance between two particles.
- *
- * Applies periodic boundary conditions using the minimum-image convention.
- * The raw displacement between particles i and j is adjusted so that dx and dy
- * represent the shortest separation across the periodic domain.
- *
- * @param sys       System containing particle positions and box dimensions.
- * @param i         Index of the first particle.
- * @param j         Index of the second particle.
- * @param dx        Output: minimum-image x displacement.
- * @param dy        Output: minimum-image y displacement.
- *
- * @return The minimum-image distance squared between particles i and j.
- */
-double min_image_distance(const System& sys, int i, int j, double& dx, double& dy);
-
-
-/**
  * @brief Compute all pairwise Lennard-Jones forces in the system.
  *
  * Applies the minimum-image convention and ignores interactions beyond
