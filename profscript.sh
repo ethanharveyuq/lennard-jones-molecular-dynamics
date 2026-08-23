@@ -14,10 +14,9 @@
 # Workflow:
 #   1. Build the md_serial executable using CMake.
 #   2. Run the simulation with chosen parameters.
-#   3. Generate visualisation using Python script.
+#   3. Run gprof on the output and stores in profile.txt.
 # ------------------------------------------------------------------------------
 
-#!/bin/bash
 #SBATCH --job-name=milestone0
 #SBATCH --ntasks=1
 #SBATCH --nodes=1
@@ -26,6 +25,7 @@
 #SBATCH --partition=cosc3500
 #SBATCH --account=cosc3500
 
+cmake -S . -B build
 cmake --build build
-build/md_serial grid --constant-temp --write 80 1.0 1.2 1.0 1.0 0.01 1.0 1.0 15.0 15.0
-python3 src/visualise/visualise.py
+./build/md_serial grid --constant-temp --no-write 40 1.0 1.2 1.0 1.0 0.01 1.0 1.0 10.0 10.0
+gprof build/md_serial gmon.out > profile.txt
