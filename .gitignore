@@ -1,2 +1,3 @@
 build/
 md_cache_profile.trace/
+*.csv

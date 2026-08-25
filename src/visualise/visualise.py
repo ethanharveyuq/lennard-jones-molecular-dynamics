@@ -6,12 +6,12 @@ import pandas as pd
 df = pd.read_csv("output.csv")
 
 # Set up the plot
-fig, ax = plt.subplots(figsize=(10, 10))
+fig, ax = plt.subplots(figsize=(15, 15))
 (scat,) = ax.plot([], [], "bo", ms=5)
 
 # plot limits
-ax.set_xlim(0, 10)
-ax.set_ylim(0, 10)
+ax.set_xlim(0, 15)
+ax.set_ylim(0, 15)
 
 # Get unique time steps/frames
 frames = sorted(df["step"].unique())

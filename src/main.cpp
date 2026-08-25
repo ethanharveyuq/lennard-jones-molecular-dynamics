@@ -101,15 +101,15 @@ int main(int argc, char* argv[])
     double x_max = args[8];
     double y_max = args[9];
 
-    std::cout << "n: " << n << std::endl;
-    std::cout << "sigma: " << sigma << std::endl;
-    std::cout << "min_dist: " << min_dist << std::endl;
-    std::cout << "temp: " << temp << std::endl;
-    std::cout << "Kb: " << Kb << std::endl;
-    std::cout << "dt: " << dt << std::endl;
-    std::cout << "bond_strength: " << bond_strength << std::endl;
-    std::cout << "cutoff_dist: " << cutoff_dist << std::endl;
-    std::cout << "Area: " << x_max << "x" << y_max << std::endl;
+    std::cout << "n: " << n << "\n";
+    std::cout << "sigma: " << sigma << "\n";
+    std::cout << "min_dist: " << min_dist << "\n";
+    std::cout << "temp: " << temp << "\n";
+    std::cout << "Kb: " << Kb << "\n";
+    std::cout << "dt: " << dt << "\n";
+    std::cout << "bond_strength: " << bond_strength << "\n";
+    std::cout << "cutoff_dist: " << cutoff_dist << "\n";
+    std::cout << "Area: " << x_max << "x" << y_max << "\n";
 
     // Setup system and initial velocities/placement
     System sys{};
