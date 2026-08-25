@@ -1,0 +1,25 @@
+ERROR: Unable to locate a modulefile for 'perf'
+[100%] Built target md_serial
+n: 128
+sigma: 1
+min_dist: 1.2
+temp: 1
+Kb: 1
+dt: 0.01
+bond_strength: 1
+cutoff_dist: 1
+Area: 50x50
+
+ Performance counter stats for 'build/md_serial grid --constant-temp --write 128 1.0 1.2 1.0 1.0 0.01 1.0 1.0 50.0 50.0':
+
+             3,345      cache-misses:u            #    0.020 % of all cache refs      (29.80%)
+        16,990,982      cache-references:u                                            (27.88%)
+   234,709,387,473      cycles:u                                                      (37.50%)
+   393,751,399,637      instructions:u            #    1.68  insn per cycle           (45.20%)
+
+      89.282834330 seconds time elapsed
+
+      81.329573000 seconds user
+       4.915177000 seconds sys
+
+

@@ -1,0 +1,28 @@
+ERROR: Unable to locate a modulefile for 'perf'
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/Student/s4882205/project/lennard-jones-molecular-dynamics/build
+[100%] Built target md_serial
+n: 128
+sigma: 1
+min_dist: 1.2
+temp: 1
+Kb: 1
+dt: 0.01
+bond_strength: 1
+cutoff_dist: 1
+Area: 50x50
+
+ Performance counter stats for 'build/md_serial grid --constant-temp --write 128 1.0 1.2 1.0 1.0 0.01 1.0 1.0 50.0 50.0':
+
+             5,298      cache-misses:u            #    0.068 % of all cache refs      (26.93%)
+         7,838,570      cache-references:u                                            (25.97%)
+   133,515,693,287      cycles:u                                                      (24.04%)
+   227,510,023,214      instructions:u            #    1.70  insn per cycle           (35.58%)
+
+      53.765789982 seconds time elapsed
+
+      46.756880000 seconds user
+       4.850708000 seconds sys
+
+
