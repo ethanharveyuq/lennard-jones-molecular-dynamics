@@ -22,7 +22,6 @@ struct System {
     int n;
     double x_max, y_max, x_half, y_half;
     std::vector<double> x, y, vx, vy, fx, fy;
-    std::vector<double> sigma;
 };
 
 
